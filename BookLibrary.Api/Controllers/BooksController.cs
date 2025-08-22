@@ -1,46 +1,34 @@
 
-using BookLibrary.Api.Data;
+using BookLibrary.Api.Services;
 using BookLibrary.Domain;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace BookLibrary.Api.Controllers;
 
 [ApiController]
-[Route("[controller]")]
+[Route("api/books")]
 public class BooksController : ControllerBase
 {
-    private readonly BookLibraryDbContext _context;
+    private readonly IBookService _bookService;
 
-    public BooksController(BookLibraryDbContext context)
+    public BooksController(IBookService bookService)
     {
-        _context = context;
+        _bookService = bookService;
     }
 
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<Book>>> GetBooks(
+    public async Task<ActionResult<PagedResult<Book>>> GetBooks(
         [FromQuery] string? searchBy,
-        [FromQuery] string? searchValue)
+        [FromQuery] string? searchValue,
+        [FromQuery] string? sortBy,
+        [FromQuery] string? sortDirection = "asc",
+        [FromQuery] int page = 1,
+        [FromQuery] int pageSize = 5)
     {
-        Console.WriteLine($"SearchBy: {searchBy}, SearchValue: {searchValue}");
-        var query = _context.Books.AsQueryable();
-
-        if (!string.IsNullOrEmpty(searchBy) && !string.IsNullOrEmpty(searchValue))
-        {
-            switch (searchBy.ToLower())
-            {
-                case "author":
-                    query = query.Where(b => (b.FirstName + " " + b.LastName).ToLower().Contains(searchValue.ToLower()));
-                    break;
-                case "isbn":
-                    query = query.Where(b => b.Isbn.ToLower().Contains(searchValue.ToLower()));
-                    break;
-                case "title":
-                    query = query.Where(b => b.Title.ToLower().Contains(searchValue.ToLower()));
-                    break;
-            }
-        }
-
-        return await query.ToListAsync();
+        Console.WriteLine($"SearchBy: {searchBy}, SearchValue: {searchValue}, Page: {page}, PageSize: {pageSize}, SortBy: {sortBy}, SortDirection: {sortDirection}");
+        
+        var result = await _bookService.GetBooks(searchBy, searchValue, sortBy, sortDirection, page, pageSize);
+        
+        return Ok(result);
     }
 }

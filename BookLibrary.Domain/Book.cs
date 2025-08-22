@@ -11,5 +11,6 @@ public class Book
     public int CopiesInUse { get; set; }
     public string? Type { get; set; }
     public string? Isbn { get; set; }
-    public string? Category { get; set; }
-}
+    public string Category { get; set; }
+        public Ownership Ownership { get; set; }
+    }
