@@ -1,0 +1,38 @@
+# Gitignore for C# projects
+[Bb]in/
+[Oo]bj/
+
+# Gitignore for Node.js/React projects
+node_modules/
+build/
+.env
+.DS_Store
+
+# Visual Studio Code
+.vscode/
+
+# Rider
+.idea/
+
+# misc
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# build results
+[Dd]ebug/
+[Rr]elease/
+
+# packages
+*.nupkg
+*.snupkg
+
+# logs
+*.log
+
+# OS generated files
+.DS_Store
+.Trashes
+ehthumbs.db
+Thumbs.db
