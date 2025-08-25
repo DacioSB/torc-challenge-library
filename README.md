@@ -2,6 +2,8 @@
 
 This project is a personal book library database, developed as a 2-hour coding challenge for Torc. It allows you to store information about books you own, love, or want to read, and search for them by Author, ISBN, Title, or Ownership status. You can also sort the results by various criteria.
 
+![Video](./presentationvideo.mp4)
+
 ![Screenshot](./screenshot.png)
 
 ## Features
