@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { TextField, Button, Select, MenuItem, FormControl, InputLabel, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Typography, Container, Grid, Checkbox, FormGroup, FormControlLabel, Pagination, Box, TableSortLabel } from '@mui/material';
 
+const API_BASE_URL = process.env.REACT_APP_API_URL || '${API_BASE_URL}';
+
 interface PagedResult<T> {
   data: T[];
   totalCount: number;
@@ -71,7 +73,7 @@ function App() {
   };
 
   const fetchBooks = async (page: number = 1, sort?: string, direction?: 'asc' | 'desc') => {
-    let url = `http://localhost:5043/api/books?page=${page}&pageSize=${pageSize}`;
+    let url = `${API_BASE_URL}/api/books?page=${page}&pageSize=${pageSize}`;
     if (sort) {
       url += `&sortBy=${sort}&sortDirection=${direction || 'asc'}`;
     }
@@ -92,7 +94,7 @@ function App() {
     if (searchBy === 'ownership') {
       queryValue = selectedOwnerships.join(',');
     }
-    let url = `http://localhost:5043/api/books?searchBy=${searchBy}&searchValue=${queryValue}&page=1&pageSize=${pageSize}`;
+    let url = `${API_BASE_URL}/api/books?searchBy=${searchBy}&searchValue=${queryValue}&page=1&pageSize=${pageSize}`;
     if (sortBy) {
       url += `&sortBy=${sortBy}&sortDirection=${sortDirection}`;
     }
@@ -126,7 +128,7 @@ function App() {
       queryValue = selectedOwnerships.join(',');
     }
     
-    let url = `http://localhost:5043/api/books?page=${page}&pageSize=${pageSize}`;
+    let url = `${API_BASE_URL}/api/books?page=${page}&pageSize=${pageSize}`;
     if (searchBy && queryValue) {
       url += `&searchBy=${searchBy}&searchValue=${queryValue}`;
     }

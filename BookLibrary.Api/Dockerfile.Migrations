@@ -1,0 +1,24 @@
+FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
+WORKDIR /src
+
+# Copy the solution file and restore dependencies
+COPY ../BookLibrary.sln .
+COPY BookLibrary.Api/BookLibrary.Api.csproj BookLibrary.Api/
+COPY BookLibrary.Domain/BookLibrary.Domain.csproj BookLibrary.Domain/
+RUN dotnet restore "BookLibrary.Api/BookLibrary.Api.csproj"
+
+# Copy the rest of the application code
+COPY . .
+WORKDIR "/src/BookLibrary.Api"
+
+# Publish the application for migrations
+RUN dotnet publish "BookLibrary.Api.csproj" -c Release -o /app/publish
+
+FROM mcr.microsoft.com/dotnet/sdk:9.0
+WORKDIR /app/BookLibrary.Api
+COPY --from=build /src/BookLibrary.Api .
+COPY --from=build /src/BookLibrary.Domain ../BookLibrary.Domain
+
+# Install dotnet-ef tool
+RUN dotnet tool install --global dotnet-ef --version 9.0.0
+ENV PATH="${PATH}:/root/.dotnet/tools"
